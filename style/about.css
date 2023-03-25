@@ -1,0 +1,15 @@
+.about {
+    width: 800px;
+    margin: auto;
+    padding-top: 40px;
+    color: #555555;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    text-align: justify;
+}
+
+@media (max-width: 850px) {
+    .about {
+        width: 80%;
+    }
+}

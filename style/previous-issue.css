@@ -1,0 +1,47 @@
+/* main */
+
+main {
+    background: #f4f5ff;
+}
+
+/* ################################################### */
+/* prev-published */
+
+.prev-published {
+    padding: 30px;
+}
+
+.prev-p-box {
+    border-radius: 4px;
+    width: 300px;
+    background-color: white;
+}
+
+.book-image img {
+    border-radius: 4px 4px 0px 0px;
+    width: 100%;
+    height: auto;
+}
+
+.book-download {
+    padding: 10px;
+    font-weight: 600;
+    color: rgb(55, 55, 55);
+}
+
+
+/* ################################################### */
+
+@media (max-width: 500px) {
+
+
+    .prev-p-box {
+        width: 90%;
+        margin: auto;
+    }
+
+}
+
+.prev-p-box {
+    box-shadow: 0 0 10px rgb(179, 178, 178);
+}
