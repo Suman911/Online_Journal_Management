@@ -67,7 +67,7 @@
                 $_SESSION['start'] = time();
             }
             if ($current_page == "profile")
-                echo '<li class="active"><a href="./profile.php">' . $_SESSION['uname'] . '</a></li>';
+                echo '<li class="active"><a href="./profile.php">' . $_SESSION['first_name'].' '.$_SESSION['last_name'] . '</a></li>';
             else
                 echo '<li><a href="./profile.php"> Profile </a></li>';
         } else {

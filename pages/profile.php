@@ -33,10 +33,7 @@
                 </div>
                 <div class="user_details">
                     <div>
-                        <?php echo 'User id '.$_SESSION['id'] ?>
-                    </div>
-                    <div>
-                        <?php echo 'User name '.$_SESSION['uname'] ?>
+                        <?php echo 'User name '.$_SESSION['first_name'].' '.$_SESSION['last_name'] ?>
                     </div>
                     <div>
                         <?php echo 'Contact email '.$_SESSION['email'] ?>

@@ -1,30 +1,154 @@
-
-#enter,
-#UploadFile,
-#Provide,
-#Review {
-    
+#article_info {
+    padding: 30px;
 }
 
+.page_title{
+    max-width: 800px;
+    margin: auto;
+}
 
+.put_input h3 {
+    margin: 5px 0;
+    color: #383838;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-#uploded_r {
-    width: 100%;
-    margin-bottom: 20px;
-    min-height: 100px;
-    border: 1px solid #aaa;
-    margin-top: 57px;
+.put_input {
+    max-width: 1000px;
+    margin: auto;
+    margin-top: 50px;
+    border: 1px solid rgb(164, 164, 164);
+    padding: 20px;
     border-radius: 5px;
 }
 
+#article_type label {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(164, 164, 164);
+    /* text-align: left; */
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+    display: inline-block;
+}
+
+#article_type label:first-child {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+#article_type label:last-child {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+#article_type label:hover {
+    background-color: rgb(220, 220, 220);
+}
+
+#article_type input[type="radio"] {
+    margin-right: 10px;
+}
+
+.info input {
+    margin: 5px 0;
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+    border: 1px solid rgb(164, 164, 164);
+}
+
+.info input:focus,
+.info input:valid {
+    border: 1px solid #0080ff;
+}
+
+.user input {
+    margin: 0;
+}
+
+.user textarea {
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+    border: 1px solid rgb(164, 164, 164);
+}
+
+.user textarea:focus {
+    border: 1px solid #0080ff;
+}
+
+.user .flex {
+    margin: 10px 0;
+}
+
+.info h4 {
+    background-color: rgb(185, 185, 185);
+    border: 1px solid rgb(164, 164, 164);
+    color: #565656;
+    display: inline-block;
+    padding: 10px;
+}
+
+#UploadFile p {
+    color: #565656;
+}
+
+#UploadFile>div {
+    padding: 20px 0;
+}
+
+#uplod_field {
+    border: 3px dashed #565656;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+#uplod_field input[type="file"]::file-selector-button {
+    display: none;
+}
+
+#uplod_field label,
+#uplod_field input[type="file"] {
+    font-size: large;
+}
+
+#next {
+    display: inline-block;
+    font-size: 2rem;
+    margin-top: 50px;
+    width: 300px;
+}
+
+.error_msg {
+    margin-bottom: 10px;
+    color: red;
+    font-size: .8rem;
+    font-weight: bold;
+}
+
+.error_msg+input {
+    border: 1px solid red;
+}
+
+.error_msg+label {
+    border: 3px solid red;
+}
+
+.alart {
+    background-color: rgb(255, 186, 156);
+    color: rgb(255, 77, 0);
+    font-size: 2rem;
+    padding: 10px;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+}
+
+@media (max-width: 500px) {
+    .username {
+        display: inline-block;
+    }
+}

@@ -3,19 +3,21 @@ $showAlert = "false";
 $emailError = false;
 $phoneError = false;
 $passwordError = false;
-$uname = "";
+$first_name = "";
+$last_name = "";
 $email = "";
 $phone = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include('./loginsystem/connt_db.php');
-    $uname = $_POST["uname"];
+    $first_name = $_POST["first_name"];
+    $last_name = $_POST["last_name"];
     $email = $_POST["email"];
     $phone = $_POST["phone"];
     $password = $_POST["password"];
     $cpassword = $_POST["cpassword"];
 
-    $existSql = "SELECT * FROM `userinfo` WHERE `address` = '$email'";
+    $existSql = "SELECT * FROM `userinfo` WHERE `email` = '$email'";
     $result = mysqli_query($conn, $existSql);
     $emailExistRows = mysqli_num_rows($result);
     $existSql = "SELECT * FROM `userinfo` WHERE `phn` = '$phone'";
@@ -37,10 +39,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         if ($password == $cpassword) {
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO `userinfo` ( `name`, `address`, `phn`, `password`, `date`) VALUES ('$uname', '$email', '$phone', '$hash', current_timestamp())";
+            $sql = "INSERT INTO `userinfo` ( `first_name`, `last_name`, `email`, `phn`, `password`, `date`) VALUES ('$first_name', '$last_name', '$email', '$phone', '$hash', current_timestamp())";
             $result = mysqli_query($conn, $sql);
             if ($result) {
-                $sql = "Select * from `userinfo` where address='$email'";
+                $sql = "Select * from `userinfo` where email='$email'";
                 $result = mysqli_query($conn, $sql);
                 $num = mysqli_num_rows($result);
                 $row = mysqli_fetch_assoc($result);
@@ -49,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 header("location: home.php");
             } else {
-                $showAlert = "Registration Error!";
+                $showAlert = "Server Error! Try Again";
             }
         } else {
             $passwordError = "Passwords do not match";
@@ -73,20 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
 
-    <?php
-    if (true)
-        echo
-            '<div id="registration_failed" class="overlay">
-                <div class="popup">
-                    <h2>' . $showAlert . '</h2>
-                    <a class="close" href="#login_form">&times;</a>
-                    <div class="content">
-                        There are some error! please enter your information correctly, use valid email and phone number. Please try again.
-                    </div>
-                </div>
-            </div>';
-    ?>
-
     <?php require_once('./page_sections/top_section.php') ?>
 
     <nav>
@@ -98,6 +86,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     </nav>
 
+    <?php
+    if ($showAlert)
+        echo '<div class="alart">' . $showAlert . '</div>';
+    ?>
+
     <main>
         <div id="login">
             <div class="padding20_top_bottm section-title">
@@ -105,9 +98,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <form id="login_form" method="post">
                 <div class="login_inputs padding20_top_bottm">
-                    <b><label for="uname">Name:</label></b>
-                    <input type="text" id="uname" placeholder="Enter Name" value=<?php echo '"' . $uname . '"' ?>
-                        name="uname" required="">
+                    <b><label>Name:</label></b>
+                    <input type="text" id="first_name" placeholder="First Name" value="<?php echo $first_name ?>"
+                        name="first_name" required="">
+                    <input type="text" id="last_name" placeholder="Last Name" value="<?php echo $last_name ?>"
+                        name="last_name" required="">
                 </div>
 
                 <div class="login_inputs padding20_top_bottm">
@@ -116,8 +111,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($emailError)
                         echo '<span class="error_msg">' . $emailError . '</span>';
                     ?>
-                    <input type="email" id=" email" placeholder="Enter Email" value=<?php echo '"' . $email . '"' ?>
-                        name="email" required="">
+                    <input type="email" id=" email" placeholder="Enter Email" value="<?php echo $email ?>" name="email"
+                        required="">
                 </div>
 
                 <div class="login_inputs padding20_top_bottm">
@@ -126,7 +121,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($phoneError)
                         echo '<span class="error_msg">' . $phoneError . '</span>';
                     ?>
-                    <input type="tel" id="phone" name="phone" placeholder="Enter Phone number" minlength="1" value=<?php echo '"' . $phone . '"' ?> required="">
+                    <input type="tel" id="phone" name="phone" placeholder="Enter Phone number" minlength="1"
+                        value="<?php echo $phone ?>" required="">
                 </div>
 
                 <div class="login_inputs padding20_top_bottm">

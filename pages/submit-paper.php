@@ -8,6 +8,7 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
     <link href="../style/style.css" rel="stylesheet">
+    <link href="../style/submit-paper.css" rel="stylesheet">
     <link href="../style/top_footer.css" rel="stylesheet">
 </head>
 
@@ -23,226 +24,188 @@
             ?>
 
     </nav>
-    <?php
-    if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false || $_SESSION['start'] > $_SESSION['end']) {
-        session_unset();
-        session_destroy();
 
+    <?php
+
+    if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false) {
         header("location: login.php");
         exit();
     }
+
+    $journal_titleExist = "";
+    $file_Error = "";
+    $showAlert = "";
+
+    $manu = "";
+    $journal_title = "";
+    $abstracts = "";
+    $key_words = "";
+    $UserID = $_SESSION['id'];
+    $first_name = $_SESSION['first_name'];
+    $last_name = $_SESSION['last_name'];
+    $phone = $_SESSION['phone'];
+    $address = "";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        include('./loginsystem/connt_db.php');
+
+        $manu = $_POST["manu"];
+        $journal_title = $_POST["journal_title"];
+        $abstracts = $_POST["abstracts"];
+        $key_words = $_POST["key_words"];
+        $address = $_POST["address"];
+
+        $target_dir = "../uploads/";
+        $file_name = basename($_FILES["file"]["name"], ".pdf");
+        $target_file = $target_dir . basename($_FILES["file"]["name"]);
+        $tem_file_location = $_FILES["file"]["tmp_name"];
+
+        $existSql = "SELECT * FROM `journals` WHERE `journal_title` = '$journal_title'";
+        $result = mysqli_query($conn, $existSql);
+        $journal_titleExistRows = mysqli_num_rows($result);
+
+        $existSql = "SELECT * FROM `journals` WHERE `file_name` = '$file_name'";
+        $result = mysqli_query($conn, $existSql);
+        $file_nameExistRows = mysqli_num_rows($result);
+
+        if ($journal_titleExistRows > 0) {
+            $journal_titleExist = "Journal Title Exists";
+            if ($file_nameExistRows > 0) {
+                $file_nameExist = "Change The Filename";
+            }
+        } elseif ($file_nameExistRows > 0) {
+            $file_Error = "Change The Filename";
+        } else {
+            $sql = "INSERT INTO `journals` (`UserID`, `first_name`, `last_name`, `phone`, `address`, `manu`, `journal_title`, `abstracts`, `key_words`, `file_name`) VALUES ('$UserID', '$first_name', '$last_name', '$phone', '$address', '$manu', '$journal_title', '$abstracts', '$key_words', '$file_name');";
+            $result = mysqli_query($conn, $sql);
+            if ($result) {
+                if (move_uploaded_file($tem_file_location, $target_file)) {
+                    $showAlert = "The file " . $file_name . " has been uploaded.";
+                } else {
+                    $showAlert = "Sorry, there was an error uploading your file.";
+                }
+                header("location: home.php");
+            } else {
+                $showAlert = "Server Error! Try Again";
+            }
+        }
+    }
+
+    ?>
+
+
+    <?php
+    if ($showAlert)
+        echo '<div class="alart">' . $showAlert . '</div>';
     ?>
 
     <main>
 
-        <section id="enter">
-            <div>
-                <h3>SELECT THE TYPE OF ARTICLE FROM THE BELOW AND ENTER
-                    THE
-                    REQUIRED INFORMATION</h3>
-                <h6>ARTICLE TYPE :</h6>
-                <div>
-                    <div>
-                        <button type="button">
-                            <div>
-                                <label>
-                                    <input type="radio"name="manu"
-                                        value="Recherché paper">Recherché paper
-                                </label>
-                            </div>
-                        </button>
-
-                        <button type="button">
-                            <div>
-                                <label>
-                                    <input type="radio" name="manu"
-                                        value="Review article">Review article
-                                </label>
-                            </div>
-                        </button>
-
-                        <button type="button">
-                            <div>
-                                <label>
-                                    <input type="radio" name="manu"
-                                        value="Correspondence">Correspondence
-                                </label>
-                            </div>
-                        </button>
-
-                        <button type="button">
-                            <div>
-                                <label>
-                                    <input type="radio" name="manu"
-                                        value="Discussion">Discussion
-                                </label>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-                <div>
-                    <form>
-                        <div>
-                            <h6>FULL TITLE :</h6>
-                            <input type="text">
+        <section class="outer-box">
+            <div id="article_info">
+                <form method="post" enctype="multipart/form-data">
+                    <div id="enter" class="width-limit">
+                        <div class="section-title page_title">
+                            <h3>SELECT THE TYPE OF ARTICLE FROM THE BELOW AND ENTER THE REQUIRED INFORMATION</h3>
                         </div>
-                        <div>
-                            <h6>ABSTRACTS :</h6>
-                            <input type="text">
+
+                        <div class="put_input">
+                            <h3>ARTICLE TYPE :</h3>
+                            <div id="article_type" class="flex f-column">
+                                <label for="radio1">
+                                    <input type="radio" id="radio1" name="manu" value="Recherché paper"
+                                        required="">Recherché paper
+                                </label>
+                                <label for="radio2">
+                                    <input type="radio" id="radio2" name="manu" value="Review article"
+                                        required="">Review article
+                                </label>
+                                <label for="radio3">
+                                    <input type="radio" id="radio3" name="manu" value="Correspondence"
+                                        required="">Correspondence
+                                </label>
+                                <label for="radio4">
+                                    <input type="radio" id="radio4" name="manu" value="Discussion"
+                                        required="">Discussion
+                                </label>
+                            </div>
                         </div>
-                        <div>
-                            <h6>KEYWORDS (KEYWORDS SHOULD BE SEPARATED BY SEMI COLON) :</h6>
-                            <input type="text">
-                        </div>
-                    </form>
-                </div>
-                <div>
-                    <h3>AUTHOR DETAILS</h3>
-                    <div>
-                        <div>
-                            <h6>Author #1</h6>
-                            <div>
+
+                        <div class="put_input">
+                            <div class="info">
                                 <div>
-                                    <span>Person</span>
+                                    <h3>FULL TITLE :</h3>
+                                    <?php
+                                    if ($journal_titleExist)
+                                        echo '<span class="error_msg">' . $journal_titleExist . '</span>';
+                                    ?>
+                                    <input type="text" placeholder="Enter Journal Title" name="journal_title"
+                                        value="<?php echo $journal_title ?>" required="">
                                 </div>
-                                <input type="text" placeholder="First Name">
-                                <input type="text" placeholder="Last Name">
-                            </div>
-                            <div>
                                 <div>
-                                    <span>Telephone</span>
+                                    <h3>ABSTRACTS :</h3>
+                                    <input type="text" placeholder="Enter Abstracts" name="abstracts"
+                                        value="<?php echo $abstracts ?>" required="">
                                 </div>
-                                <input type="text">
+                                <div>
+                                    <h3>KEYWORDS (KEYWORDS SHOULD BE SEPARATED BY SEMI COLON) :</h3>
+                                    <input type="text" placeholder="Enter Keywords" name="key_words"
+                                        value="<?php echo $key_words ?>" required="">
+                                </div>
                             </div>
-                            <div>
-                                <label for="">Address:</label>
-                                <textarea rows="5"></textarea>
-                                </div=>
-                            </div>
                         </div>
-                        <div>
-                            <button type="button" class="btn">ADD AUTHOR</button>
-                            <button type="button" class="btn">REMOVE AUTHOR</button>
-                        </div>
-                    </div>
-                </div>
-        </section>
-        <section id="UploadFile">
-            <div>
-                <h3>UPLOAD FILE(S)</h3>
-                <p>
-                    PLEASE UPLOAD YOUR FILE. FOR YOUR INITIAL SUBMISSION, PLEASE UPLOAD A
-                    SINGLE PDF FILE CONTAINING YOUR MANUSCRIPTS ALL FIGURES. ALL OTHER FILES
-                    ARE OPTIONAL, INCLUDING A COVER LETTER.
-                    PLEASE USE TO MENU TO NAVIGATE THE SUBMISSION SYSTEM WHILE SUBMITTING YOUR
-                    MANUSCRIPT, USING BACK AND NEXT BUTTON COULD INFORMATION YOU HAVE ENTER.</p>
-                <div>
-                    <form action="">
-                        <div>
-                            <input type="file" name="files" multiple="multiple">
-                        </div>
-                    </form>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Status</th>
-                                <th></th>
-                                <th>Size</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-                <div>
-                    <h5><span>Uploaded File(s)</span></h5>
-                    <div>
-                        <p>No file uploaded</p>
-                    </div>
-                </div>
-                </divlass=>
-        </section>
-        <section id="Provide">
-            <div>
-                <span>
-                    <b>
-                        <h5>Provide additional information</h5>
-                    </b>
-                </span>
-                <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Acknowledgement</span>
-                    </label>
-                </p>
-            </div>
-        </section>
-        <section id="Review">
-            <div>
-                <span>
-                    <b>
-                        <h5>Review & submit</h5>
-                    </b>
-                </span>
-                <h6>Article type: <span></span></h6>
-                <div>
-                    <form>
-                        <div>
-                            <h6>FULL TITLE :</h6>
-                            <input type="text" disabled>
-                        </div>
-                        <div>
-                            <h6>ABSTRACTS :</h6>
-                            <input type="text" disabled>
-                        </div>
-                        <div>
-                            <h6>KEYWORDS (KEYWORDS SHOULD BE SEPARATED BY SEMI COLON) :</h6>
-                            <input type="text" disabled>
-                        </div>
-                    </form>
-                </div>
-                <h5><span>Author Details</span></h5>
-                <div>
-                    <div>
-                        <div>
-                            <h6>Author #1</h6>
-                            <div>
-                                <i>account_circle</i>
-                                <input disabled value="" type="text">
-                                <label for="">First Name</label>
-                            </div>
-                            <div>
-                                <i>account_circle</i>
-                                <input disabled value="" type="text">
-                                <label for="">Last Name</label>
-                            </div>
-                            <div>
-                                <i>phone</i>
-                                <input disabled type="tel">
-                                <label for="">Telephone</label>
-                            </div>
-                            <div>
-                                <i>room</i>
-                                <textarea disabled rows="5"></textarea>
-                                <label for="">Address</label>
+                        <div class="put_input">
+                            <h3>AUTHOR DETAILS</h3>
+                            <div class="info user">
+                                <div class="flex username">
+                                    <h4>Name</h4>
+                                    <input type="text" placeholder="First Name" name="first_name"
+                                        value="<?php echo $first_name ?>" disabled>
+                                    <input type="text" placeholder="Last Name" name="last_name"
+                                        value="<?php echo $last_name ?>" disabled>
+                                </div>
+                                <div class="flex">
+                                    <h4>Telephone</h4>
+                                    <input type="text" placeholder="Enter Number" name="phone"
+                                        value="<?php echo $phone ?>" disabled>
+                                </div>
+                                <div>
+                                    <h4>Address:</h4>
+                                    <textarea placeholder="Enter Your Address" name="address"
+                                        rows="5"><?php echo $address ?></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <h5><span>Uploaded File(s)</span></h5>
-                <div>
-                    <p>No file uploaded</p>
-                </div>
-                <b>
-                    <h5>Additional information</h5>
-                </b>
-                <p>
-                    <label>
-                        <input type="checkbox" checked="checked" disabled="disabled" />
-                        <span>Acknowledgement</span>
-                    </label>
-                </p>
+
+                    <div class="put_input" id="UploadFile">
+                        <h3>UPLOAD FILE(S)</h3>
+                        <div>
+                            <p>
+                                PLEASE UPLOAD YOUR FILE. FOR YOUR INITIAL SUBMISSION, PLEASE UPLOAD A
+                                SINGLE PDF FILE CONTAINING YOUR MANUSCRIPTS ALL FIGURES. ALL OTHER FILES
+                                ARE OPTIONAL, INCLUDING A COVER LETTER.
+                                PLEASE USE TO MENU TO NAVIGATE THE SUBMISSION SYSTEM WHILE SUBMITTING YOUR
+                                MANUSCRIPT, USING BACK AND NEXT BUTTON COULD INFORMATION YOU HAVE ENTER.
+                            </p>
+                        </div>
+                        <div>
+                            <div id="uplod_field">
+                                <?php
+                                if ($file_Error)
+                                    echo '<span class="error_msg">' . $file_Error . '</span>';
+                                ?>
+                                <label class="btn flex wrap even_space" for="file">
+                                    <span>Choose a file:</span>
+                                    <input type="file" id="file" name="file" accept="application/pdf">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex center">
+                        <button type="submit" class="btn" id="next">NEXT</button>
+                    </div>
+                </form>
             </div>
         </section>
 

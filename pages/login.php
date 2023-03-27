@@ -1,7 +1,7 @@
 <?php
 $showAlert = "";
-$emailError = false;
-$passwordError = false;
+$emailError = "";
+$passwordError = "";
 $email = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -10,13 +10,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["password"];
 
 
-    $sql = "Select * from `userinfo` where address='$email'";
+    $sql = "Select * from `userinfo` where email='$email'";
     $result = mysqli_query($conn, $sql);
     $num = mysqli_num_rows($result);
     if ($num == 1) {
         $row = mysqli_fetch_assoc($result);
         if (password_verify($password, $row['password'])) {
-            $login = true;
 
             include('./loginsystem/start_session.php');
 
@@ -46,21 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
 
-
-    <?php
-    // if (true)
-    //     echo
-    //         '<div id="session_ex" class="overlay">
-    //             <div class="popup">
-    //                 <h2>' . $showAlert . '</h2>
-    //                 <a class="close" href="#login_form">&times;</a>
-    //                 <div class="content">
-    //                     There are some error! please enter your information correctly, use valid email and phone number. Please try again.
-    //                 </div>
-    //             </div>
-    //         </div>';
-    ?>
-
     <?php require_once('./page_sections/top_section.php') ?>
 
     <nav>
@@ -71,6 +55,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ?>
 
     </nav>
+
+    <?php
+    if ($showAlert)
+        echo '<div class="alart">' . $showAlert . '</div>';
+    ?>
 
     <main>
         <div id="login">
