@@ -47,7 +47,7 @@ CREATE TABLE `journals` (
 
 INSERT INTO `journals` (`journal_ID`, `UserID`, `first_name`, `last_name`, `phone`, `address`, `manu`, `journal_title`, `abstracts`, `key_words`, `file_name`) VALUES
 (9656, 12330, 'Suman', 'Mondal', '786583', 'Champadanga-Dankuni road', 'Recherché paper', 'test title', 'lorem', 'lorem', 'test'),
-(9669, 12330, 'Suman', 'Mondal', '786583', 'gdhxg d hdh  yf  f', 'Recherché paper', 'hfh', 'wfde', 'dytd', '11100722016');
+(9669, 12330, 'Suman', 'Mondal', '786583', 'gdhxg d hdh  yf  f', 'Recherché paper', 'hfh', 'wfde', 'dytd', 'Doc1');
 
 -- --------------------------------------------------------
 
