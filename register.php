@@ -1,5 +1,5 @@
 <?php
-$showAlert = "false";
+$showAlert = "";
 $emailError = false;
 $phoneError = false;
 $passwordError = false;
@@ -9,7 +9,7 @@ $email = "";
 $phone = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include('./loginsystem/connt_db.php');
+    include './loginsystem/connt_db.php';
     $first_name = $_POST["first_name"];
     $last_name = $_POST["last_name"];
     $email = $_POST["email"];
@@ -36,26 +36,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($password != $cpassword) {
             $passwordError = "Passwords do not match";
         }
-    } else {
-        if ($password == $cpassword) {
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO `userinfo` ( `first_name`, `last_name`, `email`, `phn`, `password`, `date`) VALUES ('$first_name', '$last_name', '$email', '$phone', '$hash', current_timestamp())";
+    } elseif ($password == $cpassword) {
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "INSERT INTO `userinfo` ( `first_name`, `last_name`, `email`, `phn`, `password`, `date`) VALUES ('$first_name', '$last_name', '$email', '$phone', '$hash', current_timestamp())";
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            $sql = "Select * from `userinfo` where email='$email'";
             $result = mysqli_query($conn, $sql);
-            if ($result) {
-                $sql = "Select * from `userinfo` where email='$email'";
-                $result = mysqli_query($conn, $sql);
-                $num = mysqli_num_rows($result);
-                $row = mysqli_fetch_assoc($result);
+            $num = mysqli_num_rows($result);
+            $row = mysqli_fetch_assoc($result);
 
-                include('./loginsystem/start_session.php');
+            include './loginsystem/start_session.php';
 
-                header("location: home.php");
-            } else {
-                $showAlert = "Server Error! Try Again";
-            }
+            header("location: home.php");
         } else {
-            $passwordError = "Passwords do not match";
+            $showAlert = "Server Error! Try Again";
         }
+    } else {
+        $passwordError = "Passwords do not match";
     }
 }
 ?>
@@ -75,20 +73,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
 
-    <?php require_once('./page_sections/top_section.php') ?>
+    <?php require_once './page_sections/top_section.php' ?>
 
     <nav>
 
         <?php
         $current_page = "login";
-        require_once('./page_sections/nav.php');
+        require_once './page_sections/nav.php';
         ?>
 
     </nav>
 
     <?php
     if ($showAlert)
-        echo '<div class="alart">' . $showAlert . '</div>';
+        echo '<div class="alart">', $showAlert, '</div>';
     ?>
 
     <main>
@@ -157,7 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </main>
 
-    <?php require_once('./page_sections/footer.php') ?>
+    <?php require_once ('./page_sections/footer.php') ?>
 
 </body>
 
