@@ -84,7 +84,7 @@
                 } else {
                     $showAlert = "Sorry, there was an error uploading your file.";
                 }
-                header("location: home.php");
+                header("location: index.php");
             } else {
                 $showAlert = "Server Error! Try Again";
             }

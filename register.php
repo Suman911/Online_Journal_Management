@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             include './loginsystem/start_session.php';
 
-            header("location: home.php");
+            header("location: index.php");
         } else {
             $showAlert = "Server Error! Try Again";
         }

@@ -4,7 +4,7 @@
         <li <?php if ($current_page == "home") {
             echo 'class="active"';
         }
-        ?>><a href="./home.php">Home</a></li>
+        ?>><a href="./index.php">Home</a></li>
 
         <li <?php if ($current_page == "about") {
             echo 'class="active"';
@@ -55,7 +55,7 @@
         ?>><a href="./previous-issue.php">
                 Previous Issue </a></li>
 
-        <li><a href="./home.php#our-contact"> Contact </a></li>
+        <li><a href="./index.php#our-contact"> Contact </a></li>
 
         <?php
         session_start();
