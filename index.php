@@ -205,125 +205,43 @@
         <section id="articales">
             <div class="width-limit">
                 <div class="section-title">
-                    <h3> Our Previous Published </h3>
+                    <h3>Our Previous Published</h3>
                 </div>
                 <div class="flex center wrap">
+                    <?php
+                    require_once './loginsystem/connt_db.php';
+
+                    // Get latest 8 visible publications
+                    $query = "SELECT * FROM published WHERE visible = 1 ORDER BY STR_TO_DATE(date, '%M %Y') DESC LIMIT 8";
+                    $result = $conn->query($query);
+
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $formatted_date = date('F Y', strtotime($row['date']));
+                            echo '
                     <div class="prev-published">
                         <div class="prev-p-box">
                             <div class="book-image">
-                                <img src="images\journals\shah6QqOVA1673398052986_poster.jpg">
+                                <img src="' . htmlspecialchars($row['image']) . '" alt="' . htmlspecialchars($row['name']) . '">
                             </div>
                             <div class="book-download">
-                                <p class="flex wrap space_btwn">June 2022
-                                    <a>
+                                <p class="flex wrap space_btwn">' . $formatted_date . '
+                                    <a href="' . htmlspecialchars($row['path']) . '" download>
                                         <button class="btn">DOWNLOAD</button>
                                     </a>
                                 </p>
                             </div>
                         </div>
-                    </div>
-                    <div class="prev-published">
-                        <div class="prev-p-box">
-                            <div class="book-image">
-                                <img src="images\journals\gYYMR3M0GI1673397912751_poster.jpg">
-                            </div>
-                            <div class="book-download">
-                                <p class="flex wrap space_btwn">December 2021
-                                    <a>
-                                        <button class="btn">DOWNLOAD</button>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="prev-published">
-                        <div class="prev-p-box">
-                            <div class="book-image">
-                                <img src="images\journals\jb0cTutlZw1638120327472_poster.jpg">
-                            </div>
-                            <div class="book-download">
-                                <p class="flex wrap space_btwn">June 2021
-                                    <a>
-                                        <button class="btn">DOWNLOAD</button>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="prev-published">
-                        <div class="prev-p-box">
-                            <div class="book-image">
-                                <img src="images\journals\ro4DWyDIpN1638120021120_poster.jpg">
-                            </div>
-                            <div class="book-download">
-                                <p class="flex wrap space_btwn">December 2020
-                                    <a>
-                                        <button class="btn">DOWNLOAD</button>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="prev-published">
-                        <div class="prev-p-box">
-                            <div class="book-image">
-                                <img src="images\journals\VF2MTvykAA1638119976672_poster.jpg">
-                            </div>
-                            <div class="book-download">
-                                <p class="flex wrap space_btwn">June 2020
-                                    <a>
-                                        <button class="btn">DOWNLOAD</button>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="prev-published">
-                        <div class="prev-p-box">
-                            <div class="book-image">
-                                <img src="images\journals\P1N1qPUwnu1638119789696_poster.jpg">
-                            </div>
-                            <div class="book-download">
-                                <p class="flex wrap space_btwn">December 2019
-                                    <a>
-                                        <button class="btn">DOWNLOAD</button>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="prev-published">
-                        <div class="prev-p-box">
-                            <div class="book-image">
-                                <img src="images\journals\YO8qJyDcJt1638119734544_poster.jpg">
-                            </div>
-                            <div class="book-download">
-                                <p class="flex wrap space_btwn">June 2019
-                                    <a>
-                                        <button class="btn">DOWNLOAD</button>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="prev-published">
-                        <div class="prev-p-box">
-                            <div class="book-image">
-                                <img src="images\journals\8Ea2KBNIue1636893993346_poster.jpg">
-                            </div>
-                            <div class="book-download">
-                                <p class="flex wrap space_btwn">December 2018
-                                    <a>
-                                        <button class="btn">DOWNLOAD</button>
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    </div>';
+                        }
+                    } else {
+                        echo '<p>No publications found</p>';
+                    }
+                    ?>
                 </div>
                 <div class="flex center">
                     <a href="#">
-                        <button class="btn">VIEW ALL ARTICAL</button>
+                        <button class="btn">VIEW ALL ARTICLES</button>
                     </a>
                 </div>
             </div>
