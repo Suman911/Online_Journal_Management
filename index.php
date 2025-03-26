@@ -212,7 +212,7 @@
                     require_once './loginsystem/connt_db.php';
 
                     // Get latest 8 visible publications
-                    $query = "SELECT * FROM published WHERE visible = 1 ORDER BY STR_TO_DATE(date, '%M %Y') DESC LIMIT 8";
+                    $query = "SELECT * FROM published WHERE visible = 1 ORDER BY date DESC LIMIT 8";
                     $result = $conn->query($query);
 
                     if ($result->num_rows > 0) {

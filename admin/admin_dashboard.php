@@ -20,12 +20,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute();
     }
     elseif (isset($_FILES['journal_pdf'])) {
-        // File upload handling
+        // Generate safe filename components
         $name = $_POST['name'];
         $date = $_POST['date'];
-        $pdf_path = '../uploads/pdf/' . basename($_FILES['journal_pdf']['name']);
-        $image_path = '../uploads/images/' . basename($_FILES['cover_image']['name']);
         
+        // Sanitize name and date for filename
+        $clean_name = preg_replace('/[^A-Za-z0-9]/', '', str_replace(' ', '_', $name));
+        $clean_date = preg_replace('/[^A-Za-rtvz0-9]/', '', str_replace(' ', '_', $date));
+        
+        // Generate random string
+        $random = bin2hex(random_bytes(8));
+        
+        // Create unique filenames
+        $pdf_extension = pathinfo($_FILES['journal_pdf']['name'], PATHINFO_EXTENSION);
+        $img_extension = pathinfo($_FILES['cover_image']['name'], PATHINFO_EXTENSION);
+        
+        $pdf_filename = "{$clean_name}_{$clean_date}_{$random}.{$pdf_extension}";
+        $img_filename = "{$clean_name}_{$clean_date}_{$random}.{$img_extension}";
+        
+        $pdf_path = '../uploads/pdf/' . $pdf_filename;
+        $image_path = '../uploads/images/' . $img_filename;
+
+        // Create upload directories if missing
+        if (!is_dir('../uploads/pdf')) {
+            mkdir('../uploads/pdf', 0755, true);
+        }
+        if (!is_dir('../uploads/images')) {
+            mkdir('../uploads/images', 0755, true);
+        }
+
+        // Validate and move files
         if (move_uploaded_file($_FILES['journal_pdf']['tmp_name'], $pdf_path) &&
             move_uploaded_file($_FILES['cover_image']['tmp_name'], $image_path)) {
             
